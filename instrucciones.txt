@@ -1,0 +1,22 @@
+
+Problema
+
+
+
+
+Solucion
+Quiero desarrollar una biblioteca personal y comunitaria
+en donde los usuarios puedes compartir sus prefrencias.
+
+El flujo de la aplicacion sera 
+- Login simulando cuenta google
+- luego un Intro de 4 slide que presente el caso
+- el sistema hara preguntas sobre mis preferencias
+- luego podre registrar mis libros
+- se podra añadir reseñar y evaluar los libros con estrellas
+- se podra compartir en qr mis preferencias con otros como una tarjeta de invitacion
+
+
+Desarrolla una aplicacion html con bootstrap y
+js que realiza la problema y la solucion.
+Que reposiva y con un diseño minimalista.

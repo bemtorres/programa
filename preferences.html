@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferencias - Biblioteca Personal</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h3 class="mb-4 text-center">Cuéntanos sobre ti</h3>
+                        <form id="preferencesForm">
+                            <div class="mb-4">
+                                <label class="form-label">¿Qué géneros prefieres?</label>
+                                <div id="genreSelection" class="d-flex flex-wrap gap-2">
+                                    <span class="genre-tag" data-value="ficción">Ficción</span>
+                                    <span class="genre-tag" data-value="no-ficción">No Ficción</span>
+                                    <span class="genre-tag" data-value="misterio">Misterio</span>
+                                    <span class="genre-tag" data-value="ciencia-ficción">Ciencia Ficción</span>
+                                    <span class="genre-tag" data-value="romance">Romance</span>
+                                    <span class="genre-tag" data-value="fantasía">Fantasía</span>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label for="readingFrequency" class="form-label">¿Con qué frecuencia lees?</label>
+                                <select class="form-select" id="readingFrequency" name="frequency" required>
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="diario">Diario</option>
+                                    <option value="semanal">Semanal</option>
+                                    <option value="mensual">Mensual</option>
+                                    <option value="ocasional">Ocasional</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="favoriteAuthor" class="form-label">¿Autor favorito? (opcional)</label>
+                                <input type="text" class="form-control" id="favoriteAuthor" name="author">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Continuar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verificar si está logueado
+            const savedUser = localStorage.getItem('user');
+            if (!savedUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Cargar preferencias guardadas si existen
+            const savedPreferences = localStorage.getItem('preferences');
+            if (savedPreferences) {
+                const preferences = JSON.parse(savedPreferences);
+                if (preferences.frequency) {
+                    // Si ya tiene preferencias, redirigir a main
+                    window.location.href = 'main.html';
+                    return;
+                }
+            }
+
+            // Genre selection
+            const genreSelection = document.getElementById('genreSelection');
+            genreSelection.addEventListener('click', (e) => {
+                if (e.target.classList.contains('genre-tag')) {
+                    e.target.classList.toggle('selected');
+                }
+            });
+
+            // Form submit
+            document.getElementById('preferencesForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                
+                // Obtener géneros seleccionados
+                const genres = [];
+                document.querySelectorAll('.genre-tag.selected').forEach(tag => {
+                    genres.push(tag.dataset.value);
+                });
+
+                const preferences = {
+                    genres: genres,
+                    frequency: formData.get('frequency'),
+                    author: formData.get('author') || ''
+                };
+
+                localStorage.setItem('preferences', JSON.stringify(preferences));
+                window.location.href = 'main.html';
+            });
+        });
+    </script>
+</body>
+</html>
+

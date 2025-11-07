@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Biblioteca - Biblioteca Personal</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-book text-primary"></i> Mi Biblioteca
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a href="bot.html" class="btn btn-outline-success btn-sm me-2">
+                    <i class="bi bi-robot"></i> Asistente IA
+                </a>
+                <button class="btn btn-outline-primary btn-sm me-2" id="shareQRBtn">
+                    <i class="bi bi-qr-code"></i> Compartir QR
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" id="logoutBtn">
+                    <i class="bi bi-box-arrow-right"></i> Salir
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <!-- Add Book Section -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">
+                    <i class="bi bi-plus-circle text-primary"></i> Agregar Libro
+                </h5>
+                <form id="addBookForm">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="bookTitle" placeholder="Título del libro" required>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="bookAuthor" placeholder="Autor" required>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="bookGenre" required>
+                                <option value="">Género</option>
+                                <option value="ficción">Ficción</option>
+                                <option value="no-ficción">No Ficción</option>
+                                <option value="misterio">Misterio</option>
+                                <option value="ciencia-ficción">Ciencia Ficción</option>
+                                <option value="romance">Romance</option>
+                                <option value="fantasía">Fantasía</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">Agregar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Books List -->
+        <h5 class="mb-3">Mis Libros</h5>
+        <div id="booksList" class="row g-3">
+            <!-- Books will be added here dynamically -->
+        </div>
+    </div>
+
+    <!-- QR Modal -->
+    <div class="modal fade" id="qrModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title">Mi Tarjeta de Invitación Literaria</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="invitation-card">
+                        <div class="invitation-header">
+                            <i class="bi bi-book text-primary mb-3" style="font-size: 3rem;"></i>
+                            <h4 class="mb-2" id="profileName">Usuario</h4>
+                            <p class="text-muted mb-4">Perfil Literario</p>
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-12 col-md-6">
+                                <div id="qrcode" class="qr-container"></div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="profile-details text-start">
+                                    <div id="profileInfo"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invitation-footer">
+                            <p class="text-muted small mb-0">
+                                <i class="bi bi-qr-code"></i> Escanea el código QR para ver mis preferencias de lectura
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Book Review Modal -->
+    <div class="modal fade" id="reviewModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reviewModalTitle">Reseña del Libro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="reviewForm">
+                        <input type="hidden" id="reviewBookId">
+                        <div class="mb-3">
+                            <label class="form-label">Calificación</label>
+                            <div class="rating mb-2">
+                                <i class="bi bi-star rating-star" data-rating="1"></i>
+                                <i class="bi bi-star rating-star" data-rating="2"></i>
+                                <i class="bi bi-star rating-star" data-rating="3"></i>
+                                <i class="bi bi-star rating-star" data-rating="4"></i>
+                                <i class="bi bi-star rating-star" data-rating="5"></i>
+                            </div>
+                            <span id="ratingText" class="text-muted">0 estrellas</span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="reviewText" class="form-label">Reseña</label>
+                            <textarea class="form-control" id="reviewText" rows="4" placeholder="Escribe tu reseña aquí..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Guardar Reseña</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
+

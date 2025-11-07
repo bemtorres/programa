@@ -1,0 +1,551 @@
+/* Diseño Minimalista */
+:root {
+    --primary-color: #6366f1;
+    --secondary-color: #8b5cf6;
+    --text-color: #1f2937;
+    --bg-color: #f9fafb;
+    --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Screen Management */
+.screen {
+    display: none;
+    min-height: 100vh;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* Login Screen */
+#loginScreen {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+#loginScreen .card {
+    border-radius: 1rem;
+    background: white;
+}
+
+/* Intro Carousel */
+.intro-body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+    touch-action: pan-y;
+}
+
+.intro-body .carousel {
+    min-height: 100vh;
+    position: relative;
+}
+
+.carousel-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+    animation: fadeInUp 0.6s ease-out;
+    position: relative;
+    z-index: 1;
+}
+
+.carousel-item {
+    transition: transform 0.6s ease-in-out;
+}
+
+.intro-icon-wrapper {
+    margin-bottom: 2rem;
+    animation: bounceIn 0.8s ease-out;
+}
+
+.intro-icon {
+    font-size: 6rem;
+    color: white;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: float 3s ease-in-out infinite;
+}
+
+.intro-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.intro-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.95;
+    max-width: 600px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.95);
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.intro-btn {
+    background: white;
+    color: #667eea;
+    border: none;
+    font-weight: 600;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.intro-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: #f8f9fa;
+    color: #667eea;
+}
+
+.intro-control {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    margin: 0 1rem;
+}
+
+.intro-control:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+.intro-control .carousel-control-prev-icon,
+.intro-control .carousel-control-next-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.intro-indicators {
+    bottom: 30px;
+    gap: 10px;
+}
+
+.intro-indicators [data-bs-target] {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+
+.intro-indicators [data-bs-target]:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.2);
+}
+
+.intro-indicators [data-bs-target].active {
+    background-color: white;
+    border-color: white;
+    width: 30px;
+    border-radius: 6px;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Swipe Hint */
+.swipe-hint {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    color: #667eea;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.swipe-hint i {
+    font-size: 1.2rem;
+    animation: swipeHint 1.5s ease-in-out infinite;
+}
+
+@keyframes swipeHint {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(10px);
+    }
+}
+
+/* Responsive para intro */
+@media (max-width: 768px) {
+    .intro-title {
+        font-size: 1.75rem;
+    }
+
+    .intro-subtitle {
+        font-size: 1rem;
+        padding: 0 1rem;
+    }
+
+    .intro-icon {
+        font-size: 4rem;
+    }
+
+    .intro-control {
+        width: 50px;
+        height: 50px;
+        margin: 0 0.5rem;
+        opacity: 0.7;
+    }
+
+    .intro-btn {
+        font-size: 1rem;
+        padding: 0.75rem 2rem;
+    }
+
+    .carousel-content {
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* Cards */
+.card {
+    border-radius: 0.75rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Book Cards */
+.book-card {
+    transition: transform 0.2s;
+    height: 100%;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+}
+
+.book-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.book-actions {
+    margin-top: auto;
+    padding-top: 1rem;
+}
+
+/* Rating Stars */
+.rating {
+    display: flex;
+    gap: 0.25rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.rating-star {
+    color: #d1d5db;
+    transition: color 0.2s;
+}
+
+.rating-star:hover,
+.rating-star.active {
+    color: #fbbf24;
+}
+
+.rating-star.active ~ .rating-star {
+    color: #d1d5db;
+}
+
+/* Book Rating Display */
+.book-rating {
+    color: #fbbf24;
+    font-size: 1rem;
+}
+
+.book-rating .bi-star-fill {
+    color: #fbbf24;
+}
+
+.book-rating .bi-star {
+    color: #d1d5db;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    padding: 0.625rem 1rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Navbar */
+.navbar {
+    background-color: white !important;
+    box-shadow: var(--card-shadow);
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 0.75rem;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* QR Code */
+#qrcode {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 0.5rem;
+}
+
+.qr-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 0.75rem;
+    border: 2px solid #dee2e6;
+}
+
+/* Invitation Card */
+.invitation-card {
+    padding: 2rem;
+    background: white;
+    border-radius: 1rem;
+}
+
+.invitation-header {
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 1.5rem;
+}
+
+.invitation-footer {
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+    margin-top: 1rem;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.profile-stat {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+}
+
+.stat-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    text-align: center;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-content strong {
+    display: block;
+    font-size: 1.25rem;
+    color: var(--text-color);
+}
+
+.genres-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.frequency-info,
+.author-info {
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Review Badge */
+.review-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background-color: #f3f4f6;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6b7280;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .carousel-content h2 {
+        font-size: 1.75rem;
+    }
+
+    .carousel-content .lead {
+        font-size: 1rem;
+    }
+
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.book-card {
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Genre Tags for Preferences */
+.genre-tag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.genre-tag:hover {
+    background-color: #f3f4f6;
+    transform: translateY(-2px);
+}
+
+.genre-tag.selected {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+}

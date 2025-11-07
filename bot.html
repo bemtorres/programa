@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente de Libros - Biblioteca Personal</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .bot-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .bot-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem 1rem 0 0;
+            text-align: center;
+        }
+
+        .bot-avatar {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2.5rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .chat-container {
+            background: #f8f9fa;
+            height: 500px;
+            overflow-y: auto;
+            padding: 1.5rem;
+            border-left: 1px solid #dee2e6;
+            border-right: 1px solid #dee2e6;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 1rem 1.25rem;
+            border-radius: 1.25rem;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 0.25rem;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #1f2937;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .message-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message.bot .message-icon {
+            background: #fbbf24;
+            color: white;
+        }
+
+        .input-container {
+            background: white;
+            padding: 1.5rem;
+            border-top: 1px solid #dee2e6;
+            border-radius: 0 0 1rem 1rem;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 1rem;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: typing 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .suggestion-btn {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .suggestion-btn:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-action-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container">
+            <a class="navbar-brand" href="main.html">
+                <i class="bi bi-book text-primary"></i> Mi Biblioteca
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a href="main.html" class="btn btn-outline-primary btn-sm me-2">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="bot-container">
+            <div class="bot-header">
+                <div class="bot-avatar">
+                    <i class="bi bi-emoji-smile"></i>
+                </div>
+                <h3 class="mb-2">¡Hola! Soy tu Asistente de Libros</h3>
+                <p class="mb-0 opacity-90">Estoy aquí para ayudarte a encontrar el libro perfecto 😊</p>
+            </div>
+
+            <div class="chat-container" id="chatContainer">
+                <div class="message bot">
+                    <div class="message-icon">
+                        <i class="bi bi-emoji-smile"></i>
+                    </div>
+                    <div class="message-content">
+                        <p class="mb-0">¡Hola! ¡Qué alegría verte por aquí! 🌟</p>
+                        <p class="mb-0 mt-2">Soy tu asistente de libros y estoy súper emocionado de ayudarte a encontrar tu próxima lectura favorita. ¿Qué tipo de libro estás buscando hoy?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <div class="quick-actions">
+                    <button class="quick-action-btn" onclick="sendQuickMessage('Recomiéndame un libro de ficción')">
+                        <i class="bi bi-book"></i> Ficción
+                    </button>
+                    <button class="quick-action-btn" onclick="sendQuickMessage('¿Qué libro de misterio me recomiendas?')">
+                        <i class="bi bi-search"></i> Misterio
+                    </button>
+                    <button class="quick-action-btn" onclick="sendQuickMessage('Quiero leer algo de ciencia ficción')">
+                        <i class="bi bi-rocket"></i> Ciencia Ficción
+                    </button>
+                    <button class="quick-action-btn" onclick="sendQuickMessage('Recomiéndame un bestseller')">
+                        <i class="bi bi-star-fill"></i> Bestseller
+                    </button>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="userInput" placeholder="Escribe tu pregunta aquí..." onkeypress="handleKeyPress(event)">
+                    <button class="btn btn-primary" id="sendBtn" onclick="sendMessage()">
+                        <i class="bi bi-send-fill"></i> Enviar
+                    </button>
+                </div>
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+    <script>
+        const API_KEY = 'AIzaSyCTcIusaPsmfHgjqy2KSF-Q2V7MKCog5is';
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' + API_KEY;
+
+        // Verificar autenticación
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('user');
+            if (!savedUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Cargar preferencias del usuario
+            const preferences = localStorage.getItem('preferences');
+            if (preferences) {
+                const prefs = JSON.parse(preferences);
+                addBotMessage(`¡Genial! Veo que te gustan los géneros: ${prefs.genres.join(', ') || 'varios géneros'}. ¡Esto me ayudará a recomendarte libros perfectos para ti! 📚✨`);
+            }
+
+            // Auto-scroll al final
+            scrollToBottom();
+        });
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('userInput').value = message;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Agregar mensaje del usuario
+            addUserMessage(message);
+            input.value = '';
+
+            // Mostrar indicador de escritura
+            showTyping();
+
+            try {
+                // Obtener preferencias del usuario
+                const preferences = localStorage.getItem('preferences');
+                const books = localStorage.getItem('books');
+                
+                let context = 'Eres un asistente de libros muy alegre, positivo y entusiasta. Siempre estás contento y emocionado de ayudar. Responde en español de manera amigable, con emojis apropiados y siempre con una actitud muy positiva.';
+                
+                if (preferences) {
+                    const prefs = JSON.parse(preferences);
+                    context += ` El usuario tiene estas preferencias: géneros favoritos: ${prefs.genres.join(', ') || 'ninguno'}, frecuencia de lectura: ${prefs.frequency || 'no especificada'}, autor favorito: ${prefs.author || 'ninguno'}.`;
+                }
+
+                if (books) {
+                    const userBooks = JSON.parse(books);
+                    if (userBooks.length > 0) {
+                        const bookTitles = userBooks.map(b => b.title).join(', ');
+                        context += ` El usuario ya ha leído estos libros: ${bookTitles}.`;
+                    }
+                }
+
+                const prompt = `${context}\n\nUsuario pregunta: ${message}\n\nResponde de manera muy positiva y alegre, ayudando a recomendar libros.`;
+
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: prompt
+                            }]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la API');
+                }
+
+                const data = await response.json();
+                const botResponse = data.candidates[0].content.parts[0].text;
+
+                hideTyping();
+                addBotMessage(botResponse);
+
+            } catch (error) {
+                console.error('Error:', error);
+                hideTyping();
+                addBotMessage('¡Ups! 😅 Parece que hubo un pequeño problema. Pero no te preocupes, ¡estoy aquí para ayudarte! ¿Podrías intentar de nuevo? 🌟');
+            }
+        }
+
+        function addUserMessage(message) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <p class="mb-0">${escapeHtml(message)}</p>
+                </div>
+                <div class="message-icon">
+                    <i class="bi bi-person"></i>
+                </div>
+            `;
+            chatContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function addBotMessage(message) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.innerHTML = `
+                <div class="message-icon">
+                    <i class="bi bi-emoji-smile"></i>
+                </div>
+                <div class="message-content">
+                    <p class="mb-0">${formatMessage(message)}</p>
+                </div>
+            `;
+            chatContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function formatMessage(text) {
+            // Convertir saltos de línea a <br>
+            return escapeHtml(text).replace(/\n/g, '<br>');
+        }
+
+        function showTyping() {
+            document.getElementById('typingIndicator').classList.add('active');
+            scrollToBottom();
+        }
+
+        function hideTyping() {
+            document.getElementById('typingIndicator').classList.remove('active');
+        }
+
+        function scrollToBottom() {
+            const chatContainer = document.getElementById('chatContainer');
+            setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 100);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
+
